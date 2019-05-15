@@ -4,24 +4,41 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch Program",
-            "program": "${workspaceRoot}/${file}"
+            "name": "TestingStuff",
+            "program": "${workspaceFolder}/TestingStuff.js"
         },
         {
             "type": "node",
             "request": "launch",
             "name": "Launch Program",
-            "program": "${file}"
+            "program": "${workspaceRoot}/Promise.js"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "JsonParsing",
+            "program": "${workspaceRoot}/JsonParsing.js",
+            "args": ["/Users/larry/JavaScript/Sample.json"]
         },
         {
             "type": "node",
             "request": "attach",
-            "name": "Attach to Process",
+            "name": "Attach to Port 5858",
             "address": "localhost",
             "port": 5858
+        },
+        {
+            "type": "node",
+            "request": "attach",
+            "name": "Attach to Port 9229 - inspector",
+            "address": "localhost",
+            "port": 9229,
+            "protocol": "inspector",
+            "showAsyncStacks": true
         }
     ]
 }

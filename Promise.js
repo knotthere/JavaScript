@@ -72,41 +72,122 @@ var example3 = function () {
     });
 }
 
-var example4 = function() {
+var example4 = function () {
   // A promise resolves, and then in its handler, rejects...
   Promise.resolve('1')
-    .then(function(success) {
+    .then(function (success) {
       console.log(success);
       return Promise.reject('2');
-    }, function(error) {
+    }, function (error) {
       console.log(error);
       return Promise.reject('3');
-    }).then(function(success) {
+    }).then(function (success) {
       console.log(success);
-    }).catch(function(error) {
+    }).catch(function (error) {
       // Note, this catch handler wins!  The function(error) above is not called.
       console.log(error);
     });
 }
 
-var example5 = function() {
+// Do we need to bother adding an onReject handler if we don't change the rejection value?
+var example5a = function () {
 
-  Promise.resolve('11')
-    .then(function(success) {
+  var fcn = 'example5a';
+  return Promise.resolve(fcn + ' - resolve 1')
+    .then(function (success) {
       console.log(success);
-      return Promise.reject('22');
-    }, function(error) {
+      return Promise.reject(fcn + ' - reject 1');
+    }, function (error) {
       console.log(error);
-      return Promise.reject('33');
-    }).then(function(success) {
+      return Promise.reject(fcn + ' - reject 2');
+    });
+}
+
+// Here we don't exlicitly specify an onReject() handler
+var example5b = function () {
+
+  var fcn = 'example5b';
+  return Promise.resolve(fcn + ' - resolve 1')
+    .then(function (success) {
       console.log(success);
-    }, function(error) {
+      return Promise.reject(fcn + ' - reject 1');
+    });
+}
+
+// Test the two responses here - are they the same with an onReject() handler at the caller?
+var example6 = function () {
+  var local5a = example5a();
+  var local5b = example5b();
+
+  console.log(local5a); // pending
+  console.log(local5b); // pending
+
+  // Using an onReject() handler...
+  local5a.then(function (success) {
+    console.log(success);
+  }, function (error) {
+    console.log(error);
+  });
+
+  local5b.then(function (success) {
+    console.log(success);
+  }, function (error) {
+    console.log(error);
+  });
+}
+
+// Test the two responses here - are they the same with a catch() handler at the caller?
+var example7 = function () {
+  var local5a = example5a();
+  var local5b = example5b();
+
+  console.log(local5a); // pending
+  console.log(local5b); // pending
+
+  // Using an onReject() handler...
+  local5a.then(function (success) {
+    console.log(success);
+  }).catch(function (error) {
+    console.log(error);
+  });
+
+  local5b.then(function (success) {
+    console.log(success);
+  }).catch(function (error) {
+    console.log(error);
+  });
+}
+
+// Can we throw an Error from a Promise, and is that captured by the caller as a rejection?
+var example8 = function () {
+  // Here's a method we expected to return a Promise, but instead it threw an exception:
+  var throwError = function () { throw Error('Error thrown'); };
+  var returnReject = function () { return Promise.reject('Rejected Promise returned'); };
+
+  try {
+    var promiseThrow = new Promise(function (success) { returnThrow(); });
+    var promiseReject = new Promise(function (success) { returnReject(); });
+
+    promiseThrow.then(function (success) {
+      console.log(success);
+    }).catch(function (error) {
       console.log(error);
     });
+
+    promiseReject.then(function (success) {
+      console.log(success);
+    }).catch(function (error) {
+      console.log(error);
+    });
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 //example1();
 //example2();
 //example3();
 //example4();
-example5();
+//example6();
+//example7();
+example8();
