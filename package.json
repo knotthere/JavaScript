@@ -11,7 +11,10 @@
     "type": "git",
     "url": "git+https://github.com/knotthere/JavaScript.git"
   },
-  "author": "",
+  "author": "Larry Knott",
+  "bin": {
+    "jsonparse": "JsonParse.js"
+  },
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/knotthere/JavaScript/issues"
